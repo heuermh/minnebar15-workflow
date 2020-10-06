@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 
 //
-// Provide default value for input parameters
+// Provide default values for input parameters
 //
 params.logs = "logs"
 params.archive = "archive"
