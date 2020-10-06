@@ -1,13 +1,25 @@
 #!/usr/bin/env nextflow
 
+//
+// Provide default value for input parameters
+//
 params.logs = "logs"
 params.archive = "archive"
 params.errors = "errors"
 
+//
+// Find all log files in the log file directory
+//
 logFiles = Channel.fromPath("${params.logs}/**.log")
 
+//
+// Copy found log files to two channels (similar to `tee`)
+//
 (toArchive, toFilter) = logFiles.into(2)
 
+//
+// Gzip input files and publish them via file copy to the archive directory
+//
 process gzipToArchive {
   publishDir "${params.archive}", mode: 'copy'
 
@@ -21,6 +33,9 @@ process gzipToArchive {
   """
 }
 
+//
+// Grep input files for lines containing ERROR into output files
+//
 process grepErrors {
   input:
     file f from toFilter
@@ -32,6 +47,9 @@ process grepErrors {
   """
 }
 
+//
+// Gzip input files and publish them via file copy to the errors directory
+//
 process gzipToErrors {
   publishDir "${params.errors}", mode: 'copy'
 
