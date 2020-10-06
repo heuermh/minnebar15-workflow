@@ -1,8 +1,8 @@
 #!/usr/bin/env nextflow
 
-params.logs = "${baseDir}/logs"
-params.archive = "${baseDir}/archive"
-params.errors = "${baseDir}/errors"
+params.logs = "logs"
+params.archive = "archive"
+params.errors = "errors"
 
 logFiles = Channel.fromPath("${params.logs}/**.log")
 
