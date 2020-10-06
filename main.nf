@@ -1,11 +1,15 @@
 #!/usr/bin/env nextflow
 
-logFiles = Channel.fromPath('logs/**.log')
+params.logs = "${baseDir}/logs"
+params.archive = "${baseDir}/archive"
+params.errors = "${baseDir}/errors"
+
+logFiles = Channel.fromPath("${params.logs}/**.log")
 
 (toArchive, toFilter) = logFiles.into(2)
 
 process gzipToArchive {
-  publishDir 'archive', mode: 'copy'
+  publishDir "${params.archive}", mode: 'copy'
 
   input:
     file f from toArchive
@@ -29,7 +33,7 @@ process grepErrors {
 }
 
 process gzipToErrors {
-  publishDir 'errors', mode: 'copy'
+  publishDir "${params.errors}", mode: 'copy'
 
   input:
     file f from errors
