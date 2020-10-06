@@ -1,0 +1,8 @@
+*~
+#*
+*#*
+.DS_Store
+.nextflow*
+work/
+archive/
+errors/
