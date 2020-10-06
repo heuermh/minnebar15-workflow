@@ -37,13 +37,14 @@ process gzipToArchive {
 // Grep input files for lines containing ERROR into output files
 //
 process grepErrors {
+
   input:
     file f from toFilter
   output:
     file "${f}.errors" into errors
 
   """
-  grep ERROR $f > ${f}.errors
+  grep ERROR $f > ${f}.errors || true
   """
 }
 
@@ -56,9 +57,22 @@ process gzipToErrors {
   input:
     file f from errors
   output:
-    file "${f}.gz"
+    file "${f}.gz" into toReport
 
   """
   gzip -c $f > ${f}.gz
+  """
+}
+
+//
+// Send an error report via email/twitter/slack
+//
+process errorReport {
+  input:
+  file f from toReport
+
+  // replace with actual script
+  """
+  [ -s $f ] || echo "Found errors in $f"
   """
 }
